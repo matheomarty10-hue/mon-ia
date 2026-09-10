@@ -5,13 +5,13 @@ import datetime
 
 # --- Configuration de la page ---
 st.set_page_config(
-    page_title="Gemini Multimodal Chat",
-    page_icon="🤖",
+    page_title="Nexus AI",
+    page_icon="⚡",
     layout="centered",
     initial_sidebar_state="auto"
 )
 
-st.title("💬 Gemini Multimodal Chat")
+st.title("⚡ Nexus AI")
 
 # --- Configuration de l'API ---
 try:
@@ -24,13 +24,13 @@ except Exception:
 # Configuration du modèle
 model_id = "gemini-2.5-flash"
 
-system_instruction = "Tu es une intelligence artificielle générale d'excellence, polyvalente, extrêmement cultivée et dotée d'une capacité d'analyse exceptionnelle. Tu réponds à n'importe quelle question avec une précision chirurgicale, un bagout fascinant et une clarté orientation."
+system_instruction = "Tu es une intelligence artificielle generale d'excellence, polyvalente, extremement cultivee et dotee d'une capacite d'analyse exceptionnelle. Tu reponds a n'importe quelle question avec une precision chirurgicale."
 
-# --- Barre Latérale ---
+# --- Barre Laterale ---
 with st.sidebar:
     st.header("⚙️ Configuration du Chat")
     
-    if st.button("🗑️ Effacer la conversation / Nouvelle session"):
+    if st.button("🗑️ Effacer la conversation"):
         st.session_state.chat_history = []
         st.session_state.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         st.rerun()
@@ -40,7 +40,7 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
     st.session_state.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-# Création de la session de chat Google GenAI
+# Creation de la session de chat Google GenAI
 chat = client.chats.create(
     model=model_id,
     config={
@@ -54,16 +54,16 @@ for message in st.session_state.chat_history:
         st.markdown(message["content"])
 
 # --- Saisie utilisateur ---
-prompt = st.chat_input("Pose ta question à l'IA...")
+prompt = st.chat_input("Pose ta question a l'IA...")
 
 if prompt:
     st.session_state.chat_history.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Réponse de l'assistant
+    # Reponse de l'assistant
     with st.chat_message("assistant"):
-        with st.spinner("Réflexion en cours..."):
+        with st.spinner("Reflexion en cours..."):
             try:
                 response = chat.send_message(prompt)
                 bot_reply = response.text
