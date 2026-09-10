@@ -41,7 +41,5 @@ if prompt := st.chat_input("Type your message here..."):
                 
                 st.markdown(bot_reply)
                 st.session_state.messages.append({"role": "assistant", "content": bot_reply})
-            except Exception as exc:
-                # Securite absolue : nettoie l'erreur pour eviter tout plantage ASCII du serveur
-                safe_error = str(exc).encode('ascii', 'ignore').decode('ascii')
-                st.error(f"Error: {safe_error if safe_error else 'Unknown error'}")
+            except Exception:
+                st.error("An error occurred during API communication.")
