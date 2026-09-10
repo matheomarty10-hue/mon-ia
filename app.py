@@ -13,10 +13,11 @@ try:
     api_key = st.secrets["GEMINI_API_KEY"]
     client = genai.Client(api_key=api_key)
 except Exception:
-    st.error("API key missing in Streamlit secrets.")
+    st.error("API key missing or incorrect in Streamlit secrets.")
     st.stop()
 
-model_id = "gemini-2.5-flash"
+# Utilisation du modele standard officiel
+model_id = "gemini-2.0-flash"
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -41,5 +42,7 @@ if prompt := st.chat_input("Type your message here..."):
                 
                 st.markdown(bot_reply)
                 st.session_state.messages.append({"role": "assistant", "content": bot_reply})
-            except Exception:
-                st.error("An error occurred during API communication.")
+            except Exception as e:
+                # Affiche l'erreur exacte en anglais pour comprendre
+                err_msg = str(e).encode('ascii', 'ignore').decode('ascii')
+                st.error(f"API Error details: {err_msg}")
