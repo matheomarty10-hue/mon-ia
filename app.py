@@ -1,48 +1,15 @@
+import sys
+import os
+
+# Doit être fait avant tout print/logging/appel API
+os.environ["PYTHONUTF8"] = "1"
+os.environ["PYTHONIOENCODING"] = "utf-8"
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 import streamlit as st
 from google import genai
-
-st.set_page_config(
-    page_title="Nexus AI",
-    page_icon="⚡",
-    layout="centered"
-)
-
-st.title("⚡ Nexus AI")
-
-try:
-    api_key = st.secrets["GEMINI_API_KEY"]
-    client = genai.Client(api_key=api_key)
-except Exception:
-    st.error("API key missing or incorrect in Streamlit secrets.")
-    st.stop()
-
-# Utilisation du modele standard officiel
-model_id = "gemini-2.0-flash"
-
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
-if prompt := st.chat_input("Type your message here..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            try:
-                response = client.models.generate_content(
-                    model=model_id,
-                    contents=prompt
-                )
-                bot_reply = response.text if response.text else "No response generated."
-                
-                st.markdown(bot_reply)
-                st.session_state.messages.append({"role": "assistant", "content": bot_reply})
-            except Exception as e:
-                # Affiche l'erreur exacte en anglais pour comprendre
-                err_msg = str(e).encode('ascii', 'ignore').decode('ascii')
-                st.error(f"API Error details: {err_msg}")
+# ... reste de ton code
