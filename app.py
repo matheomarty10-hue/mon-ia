@@ -1,5 +1,6 @@
 import streamlit as st
 from google import genai
+import sys
 
 st.set_page_config(
     page_title="Nexus AI",
@@ -33,12 +34,14 @@ if prompt := st.chat_input("Pose ta question..."):
     with st.chat_message("assistant"):
         with st.spinner("Reflexion..."):
             try:
-                # Utilisation d'un appel direct sans historique complexe pour eviter tout bug d'encodage
                 response = client.models.generate_content(
                     model=model_id,
                     contents=prompt,
                 )
-                bot_reply = response.text
+                # On force l'encodage UTF-8 pour eviter plantage ASCII du serveur
+                raw_text = response.text if response.text else "Pas de reponse."
+                bot_reply = raw_text.encode('utf-8', 'ignore').decode('utf-8')
+                
                 st.markdown(bot_reply)
                 st.session_state.messages.append({"role": "assistant", "content": bot_reply})
             except Exception as e:
